@@ -22,14 +22,14 @@ export const api = createApi({
       providesTags: ["User"],
     }),
 
-    // getProducts: build.query({
-    //   query: () => "client/products",
-    //   providesTags: ["Products"],
-    // }),
-    // getCustomers: build.query({
-    //   query: () => "client/customers",
-    //   providesTags: ["Customers"],
-    // }),
+    getProducts: build.query({
+      query: () => "client/products",
+      providesTags: ["Products"],
+    }),
+    getCustomers: build.query({
+      query: () => "client/customers",
+      providesTags: ["Customers"],
+    }),
     // getTransactions: build.query({
     //   query: ({ page, pageSize, sort, search }) => ({
     //     url: "client/transactions",
@@ -63,8 +63,8 @@ export const api = createApi({
 
 export const {
   useGetUserQuery,
-  // useGetProductsQuery,
-  // useGetCustomersQuery,
+  useGetProductsQuery,
+  useGetCustomersQuery,
   // useGetTransactionsQuery,
   // useGetGeographyQuery,
   // useGetSalesQuery,
