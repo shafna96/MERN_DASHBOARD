@@ -3,5 +3,6 @@ import Layout from "./layout";
 import Products from "./products";
 import Customers from "./customers";
 import Transactions from "./transactions";
+import Geography from "./geography";
 
-export { Dashboard, Layout, Products, Customers, Transactions };
+export { Dashboard, Layout, Products, Customers, Transactions, Geography };
