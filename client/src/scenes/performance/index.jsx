@@ -3,8 +3,7 @@ import { Box, useTheme } from "@mui/material";
 import { useGetUserPerformanceQuery } from "state/api";
 import { useSelector } from "react-redux";
 import { DataGrid } from "@mui/x-data-grid";
-import Header from "components/Header";
-import CustomColumnMenu from "components/DataGridCustomColumnMenu";
+import { CustomColumnMenu, Header } from "components";
 
 const Performance = () => {
   const theme = useTheme();

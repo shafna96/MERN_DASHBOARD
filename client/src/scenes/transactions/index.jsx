@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetTransactionsQuery } from "state/api";
-import Header from "components/Header";
-import DataGridCustomToolbar from "components/DataGridCustomToolbar";
+import { DataGridCustomToolbar, Header } from "components";
 
 const Transactions = () => {
   const theme = useTheme();
