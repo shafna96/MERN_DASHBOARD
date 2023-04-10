@@ -8,6 +8,8 @@ import Overview from "./overview";
 import Daily from "./daily";
 import Monthly from "./monthly";
 import Breakdown from "./breakdown";
+import Admin from "./admin";
+import Performance from "./performance";
 
 export {
   Dashboard,
@@ -20,4 +22,6 @@ export {
   Daily,
   Monthly,
   Breakdown,
+  Admin,
+  Performance,
 };
