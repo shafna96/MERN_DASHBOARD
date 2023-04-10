@@ -12,6 +12,9 @@ import {
   Transactions,
   Geography,
   Overview,
+  Daily,
+  Monthly,
+  Breakdown,
 } from "scenes";
 
 function App() {
@@ -34,9 +37,9 @@ function App() {
               <Route path="/transactions" element={<Transactions />} />
               <Route path="/geography" element={<Geography />} />
               <Route path="/overview" element={<Overview />} />
-              {/* <Route path="/daily" element={<Daily />} /> */}
-              {/* <Route path="/monthly" element={<Monthly />} /> */}
-              {/* <Route path="/breakdown" element={<Breakdown />} /> */}
+              <Route path="/daily" element={<Daily />} />
+              <Route path="/monthly" element={<Monthly />} />
+              <Route path="/breakdown" element={<Breakdown />} />
               {/* <Route path="/admin" element={<Admin />} /> */}
               {/* <Route path="/performance" element={<Performance />} /> */}
             </Route>
