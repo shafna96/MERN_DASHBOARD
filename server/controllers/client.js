@@ -35,6 +35,25 @@ export const getCustomers = async (req, res) => {
   }
 };
 
+export const addCustomer = async (req, res) => {
+  try {
+    const { name, email, password, phoneNumber, country, occupation } =
+      req.body;
+    const customer = await User.create({
+      name,
+      email,
+      password,
+      phoneNumber,
+      country,
+      occupation,
+      role: "user",
+    });
+    res.status(201).json(customer);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 export const getTransactions = async (req, res) => {
   try {
     // sort should look like this: { "field": "userId", "sort": "desc"}

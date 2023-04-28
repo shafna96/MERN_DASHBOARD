@@ -25,6 +25,7 @@ import {
 import Transaction from "./models/Transaction.js";
 import OverallStat from "./models/OverallStat.js";
 import AffiliateStat from "./models/AffiliateStat.js";
+import { addCustomer } from "./controllers/client.js";
 
 /* CONFIGURATION */
 dotenv.config();
@@ -43,6 +44,7 @@ app.use("/general", generalRoutes);
 app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
 
+app.post("client/customers", addCustomer);
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;
 mongoose
@@ -55,10 +57,10 @@ mongoose
 
     /* ONLY ADD DATA ONE TIME */
     // AffiliateStat.insertMany(dataAffiliateStat);
-    //OverallStat.insertMany(dataOverallStat);
+    // OverallStat.insertMany(dataOverallStat);
     // Product.insertMany(dataProduct);
-    //ProductStat.insertMany(dataProductStat);
-    //Transaction.insertMany(dataTransaction);
-    // User.insertMany(dataUser);
+    // ProductStat.insertMany(dataProductStat);
+    // Transaction.insertMany(dataTransaction);
+    //User.insertMany(dataUser);
   })
   .catch((error) => console.log(`${error} did not connect`));

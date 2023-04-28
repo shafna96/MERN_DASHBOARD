@@ -58,6 +58,14 @@ export const api = createApi({
       query: () => "general/dashboard",
       providesTags: ["Dashboard"],
     }),
+    createCustomer: build.mutation({
+      query: (customer) => ({
+        url: "client/customers",
+        method: "POST",
+        body: customer,
+      }),
+      invalidatesTags: ["Customers"],
+    }),
   }),
 });
 
@@ -71,4 +79,5 @@ export const {
   useGetAdminsQuery,
   useGetUserPerformanceQuery,
   useGetDashboardQuery,
+  useCreateCustomerMutation,
 } = api;
