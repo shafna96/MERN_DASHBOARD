@@ -3,6 +3,7 @@ import ProductStat from "../models/ProductStat.js";
 import User from "../models/User.js";
 import Transaction from "../models/Transaction.js";
 import getCountryIso3 from "country-iso-2-to-3";
+import mongoose from "mongoose";
 
 export const getProducts = async (req, res) => {
   try {
@@ -52,6 +53,21 @@ export const addCustomer = async (req, res) => {
     res.status(201).json(customer);
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+export const deleteCustomer = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const customer = await User.findById(id);
+    if (!customer) {
+      return res.status(404).json({ message: "Customer not found" });
+    }
+
+    await customer.deleteOne();
+    res.status(200).json({ message: "Customer deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 

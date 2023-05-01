@@ -66,6 +66,13 @@ export const api = createApi({
       }),
       invalidatesTags: ["Customers"],
     }),
+    deleteCustomer: build.mutation({
+      query: (id) => ({
+        url: `client/customers/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Customers"],
+    }),
   }),
 });
 
@@ -80,4 +87,5 @@ export const {
   useGetUserPerformanceQuery,
   useGetDashboardQuery,
   useCreateCustomerMutation,
+  useDeleteCustomerMutation,
 } = api;

@@ -47,7 +47,13 @@ app.use("/sales", salesRoutes);
 
 //app.post("client/customers", addCustomer);
 
+// const corsOptions = {
+//   origin: "http://example.com",
+//   methods: ["GET", "POST", "DELETE"],
+//   allowedHeaders: ["Content-Type", "Authorization"],
+// };
 /* Serve React app */
+
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, "client", "build")));
 
