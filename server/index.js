@@ -61,6 +61,8 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 
+// This will serve the index.html file for all other routes that are not handled by a specific route
+
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;
 mongoose
