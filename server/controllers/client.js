@@ -42,12 +42,13 @@ export const addCustomer = async (req, res) => {
     const customer = await User.create({
       name,
       email,
-      password,
+      password: "1234",
       phoneNumber,
       country,
       occupation,
       role: "user",
     });
+    customer.save();
     res.status(201).json(customer);
   } catch (error) {
     res.status(400).json({ message: error.message });

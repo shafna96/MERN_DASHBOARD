@@ -22,11 +22,11 @@ const columns = [
     headerName: "Email",
     flex: 1,
   },
-  {
-    field: "password",
-    headerName: "password",
-    flex: 1,
-  },
+  // {
+  //   field: "password",
+  //   headerName: "password",
+  //   flex: 1,
+  // },
   {
     field: "phoneNumber",
     headerName: "Phone Number",
@@ -45,11 +45,11 @@ const columns = [
     headerName: "Occupation",
     flex: 1,
   },
-  {
-    field: "role",
-    headerName: "Role",
-    flex: 0.5,
-  },
+  // {
+  //   field: "role",
+  //   headerName: "Role",
+  //   flex: 0.5,
+  // },
 ];
 const Customers = () => {
   const theme = useTheme();

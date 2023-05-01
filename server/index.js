@@ -1,4 +1,5 @@
 import express from "express";
+import path from "path";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -45,6 +46,15 @@ app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
 
 //app.post("client/customers", addCustomer);
+
+/* Serve React app */
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, "client", "build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
+
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;
 mongoose
