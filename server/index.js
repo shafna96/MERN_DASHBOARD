@@ -44,7 +44,7 @@ app.use("/general", generalRoutes);
 app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
 
-app.post("client/customers", addCustomer);
+//app.post("client/customers", addCustomer);
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;
 mongoose
