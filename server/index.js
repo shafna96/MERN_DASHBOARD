@@ -51,6 +51,12 @@ app.use("/sales", salesRoutes);
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, "client", "build")));
 
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
+
+// This will serve the index.html file when you visit the root route of your app
+
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
