@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/MERN_Dashboard/static/css/main.15e43d20.css",
+    "main.js": "/MERN_Dashboard/static/js/main.62f594f9.js",
+    "static/media/profile.jpeg": "/MERN_Dashboard/static/media/profile.42c126d38ecd6a94419f.jpeg",
+    "index.html": "/MERN_Dashboard/index.html",
+    "main.15e43d20.css.map": "/MERN_Dashboard/static/css/main.15e43d20.css.map",
+    "main.62f594f9.js.map": "/MERN_Dashboard/static/js/main.62f594f9.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.15e43d20.css",
+    "static/js/main.62f594f9.js"
+  ]
+}
