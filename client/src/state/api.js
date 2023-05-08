@@ -73,6 +73,14 @@ export const api = createApi({
       }),
       invalidatesTags: ["Customers"],
     }),
+    editCustomer: build.mutation({
+      query: ({ id, customer }) => ({
+        url: `client/customers/${id}`,
+        method: "PUT", // or "PATCH" depending on your API
+        body: customer,
+      }),
+      invalidatesTags: ["Customers"],
+    }),
   }),
 });
 
@@ -88,4 +96,5 @@ export const {
   useGetDashboardQuery,
   useCreateCustomerMutation,
   useDeleteCustomerMutation,
+  useEditCustomerMutation,
 } = api;

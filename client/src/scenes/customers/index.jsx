@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 
-import { Box, Button, Grid, OutlinedInput, useTheme } from "@mui/material";
+import { Box, Button, Modal, useTheme } from "@mui/material";
 import {
   useCreateCustomerMutation,
   useDeleteCustomerMutation,
+  useEditCustomerMutation,
   useGetCustomersQuery,
 } from "state/api";
 import { DataGrid } from "@mui/x-data-grid";
@@ -13,15 +14,54 @@ import FormComp from "components/FormComp";
 const Customers = () => {
   const theme = useTheme();
   const { data, isLoading } = useGetCustomersQuery();
+  const [open, setOpen] = useState(false);
   const [deleteCustomer, { isLoading: isDeleting }] =
     useDeleteCustomerMutation();
   const [createCustomer, { isLoading: isCreating }] =
     useCreateCustomerMutation();
+  const [editCustomer, { isLoading: isEditing }] = useEditCustomerMutation();
+  const [editFormData, setEditFormData] = useState({});
+  // console.log({ ...data });
+  // useEffect(() => {
+  //   if (data) {
+  //     setEditFormData({ ...data });
+  //   }
+  // }, [data]);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleEditClick = (params) => {
     console.log(params.row);
+    setEditFormData(params.row);
+    setOpen(true);
     // Do something with the row data, such as opening a dialog to edit it
   };
+  const handleEditChange = (event, params) => {
+    const { name, value } = event.target;
+
+    setEditFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+  const handleEditSubmit = async (event, params) => {
+    event.preventDefault(); // prevent default form submission behavior
+    if (isEditing) {
+      return;
+    }
+    try {
+      const updatedCustomer = editFormData;
+      await editCustomer({ id: params.row._id, customer: updatedCustomer });
+      /* handle success */
+      setOpen(false);
+    } catch (error) {
+      /* handle error */
+      console.log(error);
+    }
+  };
+
   const handleDeleteClick = async (params) => {
     if (isDeleting) {
       return;
@@ -89,6 +129,37 @@ const Customers = () => {
             >
               Edit
             </Button>
+            {/* <Button variant="contained" color="primary" onClick={handleOpen}>
+              Edit
+            </Button> */}
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: "75%",
+                  bgcolor: "background.paper",
+                  //  border: "2px solid #000",
+                  // boxShadow: 24,
+                  p: 4,
+                }}
+              >
+                <FormComp
+                  edit
+                  data={filteredFields}
+                  value={editFormData}
+                  handleChange={(event) => handleEditChange(event, params)}
+                  handleSubmit={(event) => handleEditSubmit(event, params)}
+                />
+              </Box>
+            </Modal>
             <Button
               variant="contained"
               color="primary"
@@ -103,7 +174,7 @@ const Customers = () => {
   ];
 
   const filteredFields = columns.filter(
-    (column) => column.field !== ("actions" && "_id")
+    (column) => column.field !== "_id" && column.field !== "actions"
   );
   const filteredColumns = columns.filter(
     (column) => column.field !== "password"
@@ -112,14 +183,12 @@ const Customers = () => {
   const [formFields, setFormFields] = useState(
     filteredFields.reduce((acc, { field }) => ({ ...acc, [field]: "" }), {})
   );
-
   const formFieldsRef = useRef(formFields);
 
-  useEffect(() => {
-    setFormFields(formFieldsRef.current);
-  }, []);
-
   const handleSubmit = async () => {
+    if (isCreating) {
+      return;
+    }
     try {
       await createCustomer(formFields).unwrap();
     } catch (error) {

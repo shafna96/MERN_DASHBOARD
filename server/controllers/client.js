@@ -71,6 +71,31 @@ export const deleteCustomer = async (req, res) => {
   }
 };
 
+export const updateCustomer = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email, phoneNumber, country, occupation } = req.body;
+    const updatedCustomer = await User.findByIdAndUpdate(
+      id,
+      {
+        name,
+        email,
+        phoneNumber,
+        country,
+        occupation,
+      },
+      { new: true }
+    );
+
+    if (!updatedCustomer) {
+      return res.status(404).json({ message: "Customer not found" });
+    }
+    updatedCustomer.save();
+    res.status(200).json(updatedCustomer);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 export const getTransactions = async (req, res) => {
   try {
     // sort should look like this: { "field": "userId", "sort": "desc"}

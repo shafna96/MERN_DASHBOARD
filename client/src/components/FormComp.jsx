@@ -1,7 +1,7 @@
 import { Box, Button, Grid, OutlinedInput, useTheme } from "@mui/material";
 import React from "react";
 
-const FormComp = ({ handleSubmit, data, handleChange, value }) => {
+const FormComp = ({ handleSubmit, data, handleChange, value, edit }) => {
   const theme = useTheme();
 
   return (
@@ -40,7 +40,7 @@ const FormComp = ({ handleSubmit, data, handleChange, value }) => {
               type="submit"
               // onSubmit={handleSubmit}
             >
-              ADD
+              {edit ? "SAVE" : "ADD"}
             </Button>
           </Box>
         </Grid>
