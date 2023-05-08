@@ -36,9 +36,4 @@ const UserSchema = new mongoose.Schema(
 
 const User = mongoose.model("User", UserSchema);
 
-// UserSchema.methods.deleteOneAndRemove = async function () {
-//   const removed = await this.deleteOne();
-//   return removed;
-// };
-
 export default User;

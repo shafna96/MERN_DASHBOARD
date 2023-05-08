@@ -38,8 +38,7 @@ export const getCustomers = async (req, res) => {
 
 export const addCustomer = async (req, res) => {
   try {
-    const { name, email, password, phoneNumber, country, occupation } =
-      req.body;
+    const { name, email, phoneNumber, country, occupation } = req.body;
     const customer = await User.create({
       name,
       email,
@@ -80,9 +79,11 @@ export const updateCustomer = async (req, res) => {
       {
         name,
         email,
+        password: "1234",
         phoneNumber,
         country,
         occupation,
+        role: "user",
       },
       { new: true }
     );

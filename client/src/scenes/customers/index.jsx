@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 
 import { Box, Button, Modal, useTheme } from "@mui/material";
 import {
@@ -21,12 +21,6 @@ const Customers = () => {
     useCreateCustomerMutation();
   const [editCustomer, { isLoading: isEditing }] = useEditCustomerMutation();
   const [editFormData, setEditFormData] = useState({});
-  // console.log({ ...data });
-  // useEffect(() => {
-  //   if (data) {
-  //     setEditFormData({ ...data });
-  //   }
-  // }, [data]);
 
   const handleClose = () => {
     setOpen(false);
@@ -38,24 +32,24 @@ const Customers = () => {
     setOpen(true);
     // Do something with the row data, such as opening a dialog to edit it
   };
-  const handleEditChange = (event, params) => {
+  const handleEditChange = (event) => {
     const { name, value } = event.target;
-
     setEditFormData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
-  const handleEditSubmit = async (event, params) => {
+  const handleEditSubmit = async (event) => {
     event.preventDefault(); // prevent default form submission behavior
     if (isEditing) {
       return;
     }
     try {
       const updatedCustomer = editFormData;
-      await editCustomer({ id: params.row._id, customer: updatedCustomer });
+      await editCustomer({ id: editFormData._id, customer: updatedCustomer });
       /* handle success */
       setOpen(false);
+      console.log(editFormData);
     } catch (error) {
       /* handle error */
       console.log(error);
@@ -129,34 +123,19 @@ const Customers = () => {
             >
               Edit
             </Button>
-            {/* <Button variant="contained" color="primary" onClick={handleOpen}>
-              Edit
-            </Button> */}
             <Modal
               open={open}
               onClose={handleClose}
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: "75%",
-                  bgcolor: "background.paper",
-                  //  border: "2px solid #000",
-                  // boxShadow: 24,
-                  p: 4,
-                }}
-              >
+              <Box sx={style}>
                 <FormComp
                   edit
                   data={filteredFields}
                   value={editFormData}
-                  handleChange={(event) => handleEditChange(event, params)}
-                  handleSubmit={(event) => handleEditSubmit(event, params)}
+                  handleChange={(event) => handleEditChange(event)}
+                  handleSubmit={(event) => handleEditSubmit(event)}
                 />
               </Box>
             </Modal>
@@ -244,8 +223,6 @@ const Customers = () => {
           getRowId={(row) => row._id}
           rows={data || []}
           columns={filteredColumns}
-          // checkboxSelection
-          // onSelectionModelChange={(itm) => console.log(itm)}
         />
       </Box>
     </Box>
@@ -253,3 +230,15 @@ const Customers = () => {
 };
 
 export default Customers;
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "75%",
+  bgcolor: "background.paper",
+  //  border: "2px solid #000",
+  // boxShadow: 24,
+  p: 4,
+};
