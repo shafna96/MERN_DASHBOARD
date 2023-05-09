@@ -1,6 +1,17 @@
 import React, { useState, useRef } from "react";
 
-import { Box, Button, Modal, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Modal,
+  Slide,
+  useTheme,
+} from "@mui/material";
 import {
   useCreateCustomerMutation,
   useDeleteCustomerMutation,
@@ -14,57 +25,20 @@ import FormComp from "components/FormComp";
 const Customers = () => {
   const theme = useTheme();
   const { data, isLoading } = useGetCustomersQuery();
-  const [open, setOpen] = useState(false);
-  const [deleteCustomer, { isLoading: isDeleting }] =
-    useDeleteCustomerMutation();
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
   const [createCustomer, { isLoading: isCreating }] =
     useCreateCustomerMutation();
+  const [deleteCustomer, { isLoading: isDeleting }] =
+    useDeleteCustomerMutation();
   const [editCustomer, { isLoading: isEditing }] = useEditCustomerMutation();
   const [editFormData, setEditFormData] = useState({});
+  const [deletingRow, setDeletingRow] = useState(null);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleEditClick = (params) => {
-    console.log(params.row);
-    setEditFormData(params.row);
-    setOpen(true);
-  };
-  const handleEditChange = (event) => {
-    const { name, value } = event.target;
-    setEditFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-  const handleEditSubmit = async (event) => {
-    event.preventDefault();
-    if (isEditing) {
-      return;
-    }
-    try {
-      const updatedCustomer = editFormData;
-      await editCustomer({ id: editFormData._id, customer: updatedCustomer });
-      setOpen(false);
-      console.log(editFormData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleDeleteClick = async (params) => {
-    if (isDeleting) {
-      return;
-    }
-    try {
-      await deleteCustomer(params.row._id).unwrap();
-      console.log(params.row._id);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
   const columns = [
     {
       field: "_id",
@@ -111,6 +85,63 @@ const Customers = () => {
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params) => {
+        const handleEditClose = () => {
+          setEditOpen(false);
+        };
+
+        const handleDeleteClose = () => {
+          setDeleteOpen(false);
+        };
+
+        const handleEditClick = (params) => {
+          console.log(params.row);
+          setEditFormData(params.row);
+          setEditOpen(true);
+        };
+        const handleEditChange = (event) => {
+          const { name, value } = event.target;
+          setEditFormData((prevState) => ({
+            ...prevState,
+            [name]: value,
+          }));
+        };
+        const handleEditSubmit = async (event) => {
+          event.preventDefault();
+          if (isEditing) {
+            return;
+          }
+          try {
+            const updatedCustomer = editFormData;
+            await editCustomer({
+              id: editFormData._id,
+              customer: updatedCustomer,
+            });
+            setEditOpen(false);
+            console.log(editFormData);
+          } catch (error) {
+            console.log(error);
+          }
+        };
+
+        const handleDeleteClick = (params) => {
+          setDeletingRow(params.row);
+          console.log(params.row);
+          setDeleteOpen(true);
+        };
+        const handleDeleteSubmit = async (event) => {
+          event.preventDefault();
+          if (isDeleting) {
+            return;
+          }
+          try {
+            await deleteCustomer(deletingRow._id).unwrap();
+            console.log(deletingRow._id);
+            setDeletingRow(null);
+            setDeleteOpen(false);
+          } catch (error) {
+            console.log(error);
+          }
+        };
         return (
           <Box>
             <Button
@@ -121,8 +152,8 @@ const Customers = () => {
               Edit
             </Button>
             <Modal
-              open={open}
-              onClose={handleClose}
+              open={editOpen}
+              onClose={handleEditClose}
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
@@ -143,6 +174,40 @@ const Customers = () => {
             >
               Delete
             </Button>
+            <Modal
+              open={deleteOpen && deletingRow?._id === params.row._id}
+              onClose={handleDeleteClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <Dialog
+                  open={deleteOpen}
+                  TransitionComponent={Transition}
+                  keepMounted
+                  onClose={handleDeleteClose}
+                  aria-describedby="alert-dialog-slide-description"
+                >
+                  <DialogTitle>{"Confirm delete"}</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-slide-description">
+                      Do you really want to delete this record? This process
+                      cannot be undone
+                      <br />
+                      <strong>{`name: ${params.row.name}`}</strong>
+                      <br />
+                      <strong>{`email: ${params.row.email}`}</strong>
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleDeleteClose}>Cancel</Button>
+                    <Button onClick={(event) => handleDeleteSubmit(event)}>
+                      Delete
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </Box>
+            </Modal>
           </Box>
         );
       },
@@ -161,31 +226,35 @@ const Customers = () => {
   );
   const formFieldsRef = useRef(formFields);
 
-  const handleSubmit = async () => {
+  const handleChange = (event) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+    formFieldsRef.current = { ...formFieldsRef.current, [name]: value };
+    setFormFields(formFieldsRef.current);
+  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     if (isCreating) {
       return;
     }
     try {
       await createCustomer(formFields).unwrap();
+      setFormFields(
+        filteredFields.reduce((acc, { field }) => ({ ...acc, [field]: "" }), {})
+      );
     } catch (error) {
       console.log(error);
     }
   };
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    formFieldsRef.current = { ...formFieldsRef.current, [name]: value };
-    setFormFields(formFieldsRef.current);
-  };
   return (
     <Box m="1.5rem 2.5rem">
       <Header title="CUSTOMERS" subTitle="List of Customers" />
-
+      {isCreating && <>data creating</>}
       <FormComp
         data={filteredFields}
         value={formFields}
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
+        handleChange={(event) => handleChange(event)}
+        handleSubmit={(event) => handleSubmit(event)}
       />
       <Box
         mt="40px"
@@ -235,7 +304,5 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: "75%",
   bgcolor: "background.paper",
-  //  border: "2px solid #000",
-  // boxShadow: 24,
   p: 4,
 };

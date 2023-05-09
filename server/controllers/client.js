@@ -38,7 +38,8 @@ export const getCustomers = async (req, res) => {
 
 export const addCustomer = async (req, res) => {
   try {
-    const { name, email, phoneNumber, country, occupation } = req.body;
+    const { name, email, password, phoneNumber, country, occupation, role } =
+      req.body;
     const customer = await User.create({
       name,
       email,
@@ -48,7 +49,6 @@ export const addCustomer = async (req, res) => {
       occupation,
       role: "user",
     });
-    customer.save();
     res.status(201).json(customer);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -73,7 +73,8 @@ export const deleteCustomer = async (req, res) => {
 export const updateCustomer = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, email, phoneNumber, country, occupation } = req.body;
+    const { name, email, password, phoneNumber, country, occupation, role } =
+      req.body;
     const updatedCustomer = await User.findByIdAndUpdate(
       id,
       {
