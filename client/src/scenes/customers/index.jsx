@@ -30,7 +30,6 @@ const Customers = () => {
     console.log(params.row);
     setEditFormData(params.row);
     setOpen(true);
-    // Do something with the row data, such as opening a dialog to edit it
   };
   const handleEditChange = (event) => {
     const { name, value } = event.target;
@@ -40,18 +39,16 @@ const Customers = () => {
     }));
   };
   const handleEditSubmit = async (event) => {
-    event.preventDefault(); // prevent default form submission behavior
+    event.preventDefault();
     if (isEditing) {
       return;
     }
     try {
       const updatedCustomer = editFormData;
       await editCustomer({ id: editFormData._id, customer: updatedCustomer });
-      /* handle success */
       setOpen(false);
       console.log(editFormData);
     } catch (error) {
-      /* handle error */
       console.log(error);
     }
   };
